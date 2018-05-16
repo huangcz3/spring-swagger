@@ -1,0 +1,24 @@
+##consul相关配置在放在此文件中,bootstrap.yml比applciation.properties先加载
+spring:
+  application:
+    name: ms-iop-channelInteract    #链接追踪需要用到日志中的应用名称，需要提前加载，所以需要在bootstrap.yml中配置
+  cloud:
+    consul:
+      host: 127.0.0.1
+      port: 8500
+      config:
+        enabled: true
+        prefix: ms-config #设置配置值的基本文件夹
+        defaultContext: apps #设置所有应用程序使用的文件夹名称
+        profileSeparator: '::' #设置分隔符的值，用于使用配置文件在属性源中分隔配置文件名称
+        format: KEY-VALUE    # 表示consul上面文件的格式 有四种 YAML PROPERTIES KEY-VALUE FILES
+        data-key: configuration    #表示consul上面的KEY值(或者说文件的名字) 默认是data
+        watch:
+          delay: 1000 #默认值为1000，以毫秒为单位
+      discovery:
+        #Consul实例的运行状况检查默认为“/ health”，它是Spring Boot Actuator应用程序中有用端点的默认位置。如果您使用非默认上下文路径或servlet路径（例如server.servletPath=/foo）或管理端点路径（例如management.context-path=/admin）），则需要更改这些，即使是执行器应用程序。也可以配置Consul用于检查运行状况端点的间隔。“10s”和“1m”分别表示10秒和1分
+        healthCheckPath: /health
+        healthCheckInterval: 15s
+        #现场环境复杂，默认使用主机名的方式可能需要修改/etc/hosts所以不方便部署，改成使用ip的方式，
+        preferIpAddress: true
+        ipAddress: 127.0.0.1

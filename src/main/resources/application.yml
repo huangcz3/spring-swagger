@@ -1,0 +1,31 @@
+management:
+  security:
+    #关闭安全验证,如果不关闭就需要身份认证，否则只有少量信息,//TODO 生产环境需要添加验证
+    enabled: false
+server:
+  #服务运行端口，生产环境中使用命令行参数传入
+  port: 6060
+
+spring:
+  rocketmq:
+    name-server: 127.0.0.1:9876
+    producer:
+      group: my-group
+      retry-times-when-send-async-failed: 0
+      send-msg-timeout: 300000
+      compress-msg-body-over-howmuch: 4096
+      max-message-size: 4194304
+      retry-another-broker-when-not-store-ok: false
+      retry-times-when-send-failed: 2
+
+info: #定义各种额外的详情给服务端显示
+  app:
+    name: "@project.artifactId@"   #从pom.xml中获取#"@project.name@"
+    description: "@project.description@"
+    version: "@project.version@"
+    spring-boot-version: "@project.parent.version@" #spring boot版本
+
+iop:
+  channel:
+    interact:
+      event-topic: tp_iop_channelInteract
